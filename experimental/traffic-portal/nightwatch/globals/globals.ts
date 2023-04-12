@@ -26,6 +26,7 @@ import type { DivisionDetailPageObject } from "nightwatch/page_objects/cacheGrou
 import type { DivisionsPageObject } from "nightwatch/page_objects/cacheGroups/divisionsTable";
 import type { RegionDetailPageObject } from "nightwatch/page_objects/cacheGroups/regionDetail";
 import type { RegionsPageObject } from "nightwatch/page_objects/cacheGroups/regionsTable";
+import type { CDNDetailPageObject } from "nightwatch/page_objects/cdns/cdnDetail";
 import type { CommonPageObject } from "nightwatch/page_objects/common";
 import type { DeliveryServiceCardPageObject } from "nightwatch/page_objects/deliveryServices/deliveryServiceCard";
 import type { DeliveryServiceDetailPageObject } from "nightwatch/page_objects/deliveryServices/deliveryServiceDetail";
@@ -86,6 +87,9 @@ declare module "nightwatch" {
 			regionsTable: () => RegionsPageObject;
 			asnsTable: () => AsnsPageObject;
 			asnDetail: () => AsnDetailPageObject;
+		};
+		cdns: {
+			cdnDetail: () => CDNDetailPageObject;
 		};
 		deliveryServices: {
 			deliveryServiceCard: () => DeliveryServiceCardPageObject;
@@ -305,7 +309,7 @@ const globals = {
 			data.division = respDivision;
 
 			const region: RequestRegion = {
-				division: 1,
+				division: respDivision.id,
 				name: `testR${globals.uniqueString}`
 			};
 			url = `${apiUrl}/regions`;
@@ -322,12 +326,12 @@ const globals = {
 			url = `${apiUrl}/cachegroups`;
 			resp = await client.post(url, JSON.stringify(cacheGroup));
 			const responseCG: ResponseCacheGroup = resp.data.response;
-			console.log("Successfully created Cache Group:", responseCG);
+			console.log("Successfully created Cache Group:", responseCG.name);
 			data.cacheGroup = responseCG;
 
 			const asn: RequestASN = {
-				asn: 0,
-				cachegroupId: 1
+				asn: +globals.uniqueString,
+				cachegroupId: responseCG.id
 			};
 			url = `${apiUrl}/asns`;
 			resp = await client.post(url, JSON.stringify(asn));
