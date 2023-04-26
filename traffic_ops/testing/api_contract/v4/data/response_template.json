@@ -112,73 +112,104 @@
     },
     "parameters": {
         "type": "object",
+        "required": [
+            "configFile",
+            "id",
+            "lastUpdated",
+            "name",
+            "profiles",
+            "secure",
+            "value"
+        ],
         "properties": {
             "configFile": {
-                "type": "str"
+                "type": "string"
             },
             "id": {
-                "type": "int"
+                "type": "integer"
             },
             "lastUpdated": {
-                "type": "str"
+                "type": "string"
             },
             "name": {
-                "type": "str"
+                "type": "string"
             },
             "profiles": {
-                "type": "list"
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
             },
             "secure": {
-                "type": "bool"
+                "type": "boolean"
             },
             "value": {
-                "type": "str"
+                "type": "string"
             }
         }
     },
     "roles": {
         "type": "object",
+        "required": [
+            "name",
+            "permissions",
+            "description",
+            "lastUpdated"
+        ],
         "properties": {
             "name": {
-                "type": "str"
-            },
-            "description": {
-                "type": "str"
+                "type": "string"
             },
             "permissions": {
-                "type": "list"
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            },
+            "description": {
+                "type": "string"
             },
             "lastUpdated": {
-                "type": "str"
+                "type": "string"
             }
         }
     },
     "profiles": {
         "type": "object",
+        "required": [
+            "id",
+            "lastUpdated",
+            "name",
+            "description",
+            "cdnName",
+            "cdn",
+            "routingDisabled",
+            "type"
+        ],
         "properties": {
             "id": {
-                "type": "int"
+                "type": "integer"
             },
             "lastUpdated": {
-                "type": "str"
+                "type": "string"
             },
             "name": {
-                "type": "str"
+                "type": "string"
             },
             "description": {
-                "type": "str"
+                "type": "string"
             },
             "cdnName": {
-                "type": "str"
+                "type": "string"
             },
             "cdn": {
-                "type": "int"
+                "type": "integer"
             },
             "routingDisabled": {
-                "type": "bool"
+                "type": "boolean"
             },
             "type": {
-                "type": "str"
+                "type": "string"
             }
         }
     },

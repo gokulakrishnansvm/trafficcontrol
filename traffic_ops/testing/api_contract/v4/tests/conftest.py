@@ -124,17 +124,17 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 	parser.addoption(
 		"--config",
 		help="Path to configuration file.",
-		default=os.path.join(os.path.dirname(__file__), "to_data.json")
+		default=os.path.join(os.path.dirname(__file__), "..", "data", "to_data.json")
 	)
 	parser.addoption(
 		"--request-template",
 		help="Path to request prerequisites file.",
-		default=os.path.join(os.path.dirname(__file__), "request_template.json")
+		default=os.path.join(os.path.dirname(__file__), "..", "data", "request_template.json")
 	)
 	parser.addoption(
 		"--response-template",
 		help="Path to response prerequisites file.",
-		default=os.path.join(os.path.dirname(__file__), "response_template.json")
+		default=os.path.join(os.path.dirname(__file__), "..", "data", "response_template.json")
 	)
 
 def coalesce_config(
@@ -365,23 +365,6 @@ def response_template_data(pytestconfig: pytest.Config
 	return response_template
 
 
-def get_json_keys(data: dict) -> list:
-	"""
-    PyTest Fixture to get keys for an API response.
-    :param data: API response data.
-    :returns: List of Keys for API response.
-    """
-	api_keys = list(data.keys())
-	stack = list(data.values())
-	while stack:
-		value = stack.pop()
-		if isinstance(value, dict):
-			api_keys.extend(list(value.keys()))
-			stack.extend(value.values())
-		elif isinstance(value, list):
-			stack.extend(value)
-	return api_keys
-
 def api_response_data(api_response: tuple[primitive | dict[str, object] | list[primitive |
 			 dict[str, object] | list[object]], requests.Response], request_type: str=None) -> dict[str, object]:
 	"""
@@ -396,7 +379,6 @@ def api_response_data(api_response: tuple[primitive | dict[str, object] | list[p
 				raise TypeError("malformed API response; 'response' property not an array")
 		except KeyError as e:
 			raise TypeError(f"missing API property '{e.args[0]}'") from e
-	api_data = None
 	if api_response:
 		try:
 			api_data = api_response[0]

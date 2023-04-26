@@ -28,7 +28,6 @@ primitive = bool | int | float | str | None
 @pytest.mark.parametrize('request_template_data', ["cdns"], indirect=True)
 def test_cdn_contract(
 	to_session: TOSession,
-	request_template_data: list[dict[str, object] | list[object] | primitive],
 	response_template_data: dict[str, primitive | list[primitive | dict[str, object]
 						    | list[object]] | dict[object, object]],
 	cdn_post_data: dict[str, object]
@@ -37,18 +36,13 @@ def test_cdn_contract(
 	Test step to validate keys, values and data types from cdns endpoint
 	response.
 	:param to_session: Fixture to get Traffic Ops session.
-	:param request_template_data: Fixture to get request template data from a prerequisites file.
 	:param response_template_data: Fixture to get response template data from a prerequisites file.
 	:param cdn_post_data: Fixture to get sample CDN data and actual CDN response.
 	"""
 	# validate CDN keys from cdns get response
 	logger.info("Accessing /cdns endpoint through Traffic ops session.")
 
-	cdn = request_template_data[0]
-	if not isinstance(cdn, dict):
-		raise TypeError("malformed cdn in prerequisite data; not an object")
-
-	cdn_name = cdn.get("name")
+	cdn_name = cdn_post_data.get("name")
 	if not isinstance(cdn_name, str):
 		raise TypeError("malformed cdn in prerequisite data; 'name' not a string")
 
@@ -64,7 +58,7 @@ def test_cdn_contract(
 		first_cdn = cdn_data[0]
 		if not isinstance(first_cdn, dict):
 			raise TypeError("malformed API response; first CDN in response is not an object")
-		logger.info(f"Server Api response {first_cdn}")
+		logger.info(f"CDN Api response {first_cdn}")
 		cdn_response_template = response_template_data.get("cdns")
 		if not isinstance(cdn_response_template, dict):
 			raise TypeError(

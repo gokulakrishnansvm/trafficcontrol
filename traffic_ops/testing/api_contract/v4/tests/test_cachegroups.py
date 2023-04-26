@@ -27,7 +27,6 @@ primitive = bool | int | float | str | None
 
 
 def test_cachegroup_contract(to_session: TOSession,
-	request_template_data: list[dict[str, object] | list[object] | primitive],
 	response_template_data: dict[str, primitive | list[primitive | dict[str, object]
 						    | list[object]] | dict[object, object]],
 	cachegroup_post_data: dict[str, object]
@@ -36,18 +35,13 @@ def test_cachegroup_contract(to_session: TOSession,
 	Test step to validate keys, values and data types from cachegroup endpoint
 	response.
 	:param to_session: Fixture to get Traffic Ops session.
-	:param request_template_data: Fixture to get request template data from a prerequisites file.
 	:param response_template_data: Fixture to get response template data from a prerequisites file.
 	:param cachegroup_post_data: Fixture to get sample cachegroup data and actual cachegroup response.
 	"""
 	# validate CDN keys from cdns get response
 	logger.info("Accessing /cachegroup endpoint through Traffic ops session.")
 
-	cachegroup = request_template_data["cachegroup"][0]
-	if not isinstance(cachegroup, dict):
-		raise TypeError("malformed cachegroup in prerequisite data; not an object")
-
-	cachegroup_name = cachegroup.get("name")
+	cachegroup_name = cachegroup_post_data.get("name")
 	if not isinstance(cachegroup_name, str):
 		raise TypeError("malformed cachegroup in prerequisite data; 'name' not a string")
 
@@ -65,17 +59,14 @@ def test_cachegroup_contract(to_session: TOSession,
 		if not isinstance(first_cachegroup, dict):
 			raise TypeError("malformed API response; first Cache group in response is not an object")
 		logger.info(f"Server Api response {first_cachegroup}")
-
 		cachegroup_response_template = response_template_data.get("cachegroup")
 		
 		# validate cachegroup values from prereq data in cachegroup get response.
-		prereq_values = [cachegroup_post_data["name"],cachegroup_post_data["shortName"],
-		   cachegroup_post_data["fallbackToClosest"],cachegroup_post_data["typeId"]]
+		keys = ["name", "shortName", "fallbackToClosest", "typeId"]
+		prereq_values = [cachegroup_post_data[key] for key in keys]
+		get_values = [first_cachegroup[key] for key in keys]
 
-		get_values = [first_cachegroup["name"],first_cachegroup["shortName"],
-		first_cachegroup["fallbackToClosest"],first_cachegroup["typeId"]]
-
-		# validate keys,data types for values and actual values for cachegroup endpoint.
+		# validate keys,data types and values for cachegroup endpoint.
 		assert validate(instance=first_cachegroup, schema=cachegroup_response_template) == None
 		assert get_values == prereq_values
 	except IndexError:

@@ -27,7 +27,6 @@ primitive = bool | int | float | str | None
 
 def test_profile_contract(
 	to_session: TOSession,
-	request_template_data: list[dict[str, object] | list[object] | primitive],
 	response_template_data: dict[str, primitive | list[primitive | dict[str, object]
 						    | list[object]] | dict[object, object]],
 	profile_post_data: dict[str, object]
@@ -36,18 +35,13 @@ def test_profile_contract(
 	Test step to validate keys, values and data types from profiles endpoint
 	response.
 	:param to_session: Fixture to get Traffic Ops session.
-	:param request_template_data: Fixture to get request template data from a prerequisites file.
 	:param response_template_data: Fixture to get response template data from a prerequisites file.
 	:param profile_post_data: Fixture to get sample Profile data and actual Profile response.
 	"""
 	# validate Profile keys from profiles get response
 	logger.info("Accessing /profiles endpoint through Traffic ops session.")
 
-	profile = request_template_data["profiles"][0]
-	if not isinstance(profile, dict):
-		raise TypeError("malformed profile in prerequisite data; not an object")
-
-	profile_name = profile.get("name")
+	profile_name = profile_post_data.get("name")
 	if not isinstance(profile_name, str):
 		raise TypeError("malformed profile in prerequisite data; 'name' not a string")
 
@@ -63,6 +57,7 @@ def test_profile_contract(
 		first_profile = profile_data[0]
 		if not isinstance(first_profile, dict):
 			raise TypeError("malformed API response; first Profile in response is not an object")
+		
 		profile_response_template = response_template_data.get("profiles")
 		if not isinstance(profile_response_template, dict):
 			raise TypeError(
