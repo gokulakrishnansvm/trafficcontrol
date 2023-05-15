@@ -843,3 +843,43 @@ def origin_post_data(to_session: TOSession, request_template_data: list[JSONData
 	response: tuple[JSONData, requests.Response] = to_session.create_origins(data=origin)
 	resp_obj = check_template_data(response, "origins")
 	return resp_obj
+
+
+@pytest.fixture()
+def topologies_post_data(to_session: TOSession, request_template_data: list[JSONData],
+		     delivery_services_post_data: dict[str, object], tenant_post_data: dict[str, object]
+		      ) -> dict[str, object]:
+	"""
+	PyTest Fixture to create POST data for origins endpoint.
+	:param to_session: Fixture to get Traffic Ops session.
+	:param request_template_data: Fixture to get profile data from a prerequisites file.
+	:returns: Sample POST data and the actual API response.
+	"""
+	origin = check_template_data(request_template_data["origins"], "origins")
+
+	randstr = str(randint(0, 1000))
+	try:
+		name = origin["name"]
+		if not isinstance(name, str):
+			raise TypeError(f"name must be str, not '{type(name)}'")
+		origin["name"] = name[:4] + randstr
+	except KeyError as e:
+		raise TypeError(f"missing origin property '{e.args[0]}'") from e
+
+	# Check if delivery_service already exists, otherwise create it
+	delivery_services_id = delivery_services_post_data["id"]
+	if not isinstance(delivery_services_id, int):
+		raise TypeError("malformed API response; 'id' property not a integer")
+	origin["deliveryServiceId"] = delivery_services_id
+
+	# Check if tenant already exists, otherwise create it
+	tenant_id = tenant_post_data["id"]
+	if not isinstance(tenant_id, int):
+		raise TypeError("malformed API response; 'id' property not a integer")
+	origin["tenantId"] = tenant_id
+
+	logger.info("New origin data to hit POST method %s", origin)
+	# Hitting origins POST method
+	response: tuple[JSONData, requests.Response] = to_session.create_origins(data=origin)
+	resp_obj = check_template_data(response, "origins")
+	return resp_obj

@@ -16,7 +16,7 @@
 import logging
 import pytest
 import requests
-from jsonschema import validate
+import jsonschema
 
 from trafficops.tosession import TOSession
 
@@ -68,7 +68,7 @@ def test_delivery_services_contract(
 		prereq_values = [delivery_services_post_data[key] for key in keys]
 		get_values = [first_delivery_services[key] for key in keys]
 		
-		assert validate(instance=first_delivery_services, schema=delivery_services_response_template) == None
+		assert jsonschema.validate(instance=first_delivery_services, schema=delivery_services_response_template, format_checker=jsonschema.FormatChecker()) is None
 		assert get_values == prereq_values
 	except IndexError:
 		logger.error("Either prerequisite data or API response was malformed")
