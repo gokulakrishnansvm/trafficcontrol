@@ -103,7 +103,7 @@ resources="$(dirname "$0")"
 envsubst <"${resources}/cdn.json" >cdn.conf
 cp "${resources}/database.json" database.conf
 
-./traffic_ops_golang --cfg ./cdn.conf --dbcfg ./database.conf
+./traffic_ops_golang --cfg ./cdn.conf --dbcfg ./database.conf &
 
 cd "../testing/api_contract/v$INPUT_VERSION"
 
