@@ -31,6 +31,18 @@ color_and_prefix() {
 	sed "s/^/${color}${black_fg}${prefix}: /" | sed "s/$/${normal_bg}${normal_fg}/";
 }
 
+export GOPATH="${HOME}/go"
+org_dir="$GOPATH/src/github.com/apache"
+repo_dir="${org_dir}/trafficcontrol"
+if [[ ! -e "$repo_dir" ]]; then
+	mkdir -p "$org_dir"
+	cd
+	mv "${GITHUB_WORKSPACE}" "${repo_dir}/"
+	ln -s "$repo_dir" "${GITHUB_WORKSPACE}"
+fi
+
+cd "${repo_dir}/traffic_ops/traffic_ops_golang"
+
 resources="$(dirname "$0")"
 envsubst <"${resources}/cdn.json" >cdn.conf
 cp "${resources}/database.json" database.conf
