@@ -75,6 +75,10 @@ jobs:
       uses: py-actions/py-dependency-install@v4
       with:
         path: "${{ github.workspace }}/traffic_ops/testing/api_contract/v4/requirements.txt"
+    - name: Install Apache Traffic Control
+      run: |
+        python -m pip install --upgrade pip
+        pip install ${{ github.workspace }}/traffic_control/clients/python
     - name: Run API v4 contract tests
       id: v4Tests
       if: ${{ steps.todb.outcome == 'success' && always() }}
