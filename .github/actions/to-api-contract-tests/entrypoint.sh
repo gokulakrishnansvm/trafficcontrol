@@ -107,4 +107,4 @@ cp "${resources}/database.json" database.conf
 
 cd "../testing/api_contract/v$INPUT_VERSION"
 
-pytest --to-user admin --to-password twelve --to-url https://tp.nightly.cdnlab.comcast.net:443
+pytest
