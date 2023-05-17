@@ -78,6 +78,8 @@ jobs:
     - name: Run API v4 contract tests
       id: v4Tests
       if: ${{ steps.todb.outcome == 'success' && always() }}
-      run: .github/actions/to-api-contract-tests/entrypoint.sh
+      uses: ./.github/actions/to-api-contract-tests
+      with:
+        version: 4
     - name: Save Alpine Docker image
       run: .github/actions/save-alpine-tar/entrypoint.sh save ${{ env.ALPINE_VERSION }}
