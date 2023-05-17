@@ -91,6 +91,6 @@ cp "${resources}/database.json" database.conf
 
 ./traffic_ops_golang --cfg ./cdn.conf --dbcfg ./database.conf &
 
-cd "../testing/api_contract/v$INPUT_VERSION"
+cd "../testing/api_contract/v4/"
 
 pytest
