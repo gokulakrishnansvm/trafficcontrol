@@ -27,7 +27,7 @@ on:
       - .github/actions/todb-init/**
       - .github/actions/to-api-contract-tests/**
       - .github/workflows/to.api.contract.tests.yml
-      - traffic_ops/testing/api_contract/test_**.py
+      - traffic_ops/testing/api_contract/**
   create:
   pull_request:
     paths:
