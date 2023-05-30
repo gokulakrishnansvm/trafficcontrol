@@ -107,5 +107,6 @@ jobs:
       uses: ./.github/actions/to-api-contract-tests
       with:
         version: 4
+        smtp_address: 172.17.0.1
     - name: Save Alpine Docker image
       run: .github/actions/save-alpine-tar/entrypoint.sh save ${{ env.ALPINE_VERSION }}
