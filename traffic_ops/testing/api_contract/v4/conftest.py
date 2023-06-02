@@ -280,11 +280,6 @@ def to_login(to_args: ArgsType) -> TOSession:
 	# Create a Traffic Ops V4 session and login
 	to_url = urlparse(to_args.url)
 	to_host = to_url.hostname
-	url1 = "https://localhost/api/4.0/ping"
-	response1 = requests.get(url1, verify=False)
-	# Print the response status code and content
-	logger.info("1 Status Code: %s", response1.status_code)
-	logger.info("1 Response Content: %s", response1.content)
 
 	url2 = "https://127.0.0.1:6443/api/4.0/ping"
 	response2 = requests.get(url2, verify=False)
