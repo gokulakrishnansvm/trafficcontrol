@@ -214,6 +214,18 @@ def to_data(pytestconfig: pytest.Config) -> ArgsType:
 	:param pytestconfig: Session-scoped fixture that returns the session's pytest.Config object.
 	:returns: Configuration for connecting to Traffic Ops.
 	"""
+	url3 = "https://172.17.0.1:5432/api/4.0/ping"
+	response3 = requests.get(url3, verify=False)
+	# Print the response status code and content
+	logger.info("3 Status Code: %s", response3.status_code)
+	logger.info("3 Response Content: %s", response3.content)
+	
+	url2 = "https://127.0.0.1:6443/api/4.0/ping"
+	response2 = requests.get(url2, verify=False)
+	# Print the response status code and content
+	logger.info("2 Status Code: %s", response2.status_code)
+	logger.info("2 Response Content: %s", response2.content)
+
 	session_data: JSONData = None
 	cfg_path = pytestconfig.getoption("--config")
 	if isinstance(cfg_path, str):
@@ -280,19 +292,6 @@ def to_login(to_args: ArgsType) -> TOSession:
 	# Create a Traffic Ops V4 session and login
 	to_url = urlparse(to_args.url)
 	to_host = to_url.hostname
-
-	url2 = "https://127.0.0.1:6443/api/4.0/ping"
-	response2 = requests.get(url2, verify=False)
-	# Print the response status code and content
-	logger.info("2 Status Code: %s", response2.status_code)
-	logger.info("2 Response Content: %s", response2.content)
-
-	url3 = "https://172.17.0.1:5432/api/4.0/ping"
-	response3 = requests.get(url3, verify=False)
-	# Print the response status code and content
-	logger.info("3 Status Code: %s", response3.status_code)
-	logger.info("3 Response Content: %s", response3.content)
-
 	
 	try:
 		to_session = TOSession(
