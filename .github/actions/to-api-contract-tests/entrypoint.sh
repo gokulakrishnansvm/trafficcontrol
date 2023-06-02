@@ -31,6 +31,11 @@ color_and_prefix() {
 	sed "s/^/${color}${black_fg}${prefix}: /" | sed "s/$/${normal_bg}${normal_fg}/";
 }
 
+ciab_dir="${GITHUB_WORKSPACE}/infrastructure/cdn-in-a-box";
+openssl rand 32 | base64 | sudo tee /aes.key
+
+sudo apt-get install -y --no-install-recommends gettext
+
 export GOPATH="${HOME}/go"
 org_dir="$GOPATH/src/github.com/apache"
 repo_dir="${org_dir}/trafficcontrol"
@@ -40,7 +45,6 @@ if [[ ! -e "$repo_dir" ]]; then
 	mv "${GITHUB_WORKSPACE}" "${repo_dir}/"
 	ln -s "$repo_dir" "${GITHUB_WORKSPACE}"
 fi
-
 
 cd "${repo_dir}/traffic_ops/traffic_ops_golang"
 
@@ -112,4 +116,6 @@ truncate --size=0 traffic.ops.log # Removes output from previous API versions an
 
 cd "../testing/api_contract/v$INPUT_VERSION"
 
-pytest
+cp "${resources}/traffic-ops-test.json" traffic-ops-test.conf
+
+pytest -rA
