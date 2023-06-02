@@ -285,7 +285,7 @@ def to_login(to_args: ArgsType) -> TOSession:
 			host_ip=to_host,
 			host_port=to_args.port,
 			api_version=str(to_args.api_version),
-			ssl=True,
+			ssl=False,
 			verify_cert=False
 		)
 		logger.info("Established Traffic Ops Session.")
