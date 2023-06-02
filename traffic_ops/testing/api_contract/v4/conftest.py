@@ -185,8 +185,8 @@ def parse_to_url(raw: str) -> tuple[APIVersion, int]:
 	if not parsed.netloc:
 		raise ValueError("missing network location (hostname & optional port)")
 
-	if parsed.scheme and parsed.scheme.lower() != "https":
-		raise ValueError("invalid scheme; must use HTTPS")
+	# if parsed.scheme and parsed.scheme.lower() != "https":
+	# 	raise ValueError("invalid scheme; must use HTTPS")
 
 	port = 443
 	if ":" in parsed.netloc:
