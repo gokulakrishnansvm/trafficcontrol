@@ -116,6 +116,4 @@ truncate --size=0 traffic.ops.log # Removes output from previous API versions an
 
 cd "../testing/api_contract/v$INPUT_VERSION"
 
-cp "${resources}/traffic-ops-test.json" traffic-ops-test.conf
-
 pytest -rA
