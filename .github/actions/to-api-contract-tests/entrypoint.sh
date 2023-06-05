@@ -118,7 +118,7 @@ truncate --size=0 traffic.ops.log # Removes output from previous API versions an
 LISTENING_PORTS=$(lsof -i -P | grep LISTEN)
 
 echo "Listening ports:"
-echo "$LISTENING_PORT"
+echo "$LISTENING_PORTS"
 
 cd "../testing/api_contract/v$INPUT_VERSION"
 
