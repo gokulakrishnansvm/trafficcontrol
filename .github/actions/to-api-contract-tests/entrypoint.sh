@@ -117,8 +117,8 @@ truncate --size=0 traffic.ops.log # Removes output from previous API versions an
 
 set -e
 
-apt update
-apt install -y lsof
+sudo apt update
+sudo apt install -y lsof
 
 LISTENING_PORTS=$(lsof -i -P | grep LISTEN)
 
