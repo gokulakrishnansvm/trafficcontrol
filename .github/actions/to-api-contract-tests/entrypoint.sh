@@ -118,4 +118,9 @@ cd "../testing/api_contract/v$INPUT_VERSION"
 
 cp "${resources}/traffic-ops-test.json" traffic-ops-test.conf
 
+PORT_DETAILS=$(lsof -i -n -P | grep LISTEN)
+
+echo "Running ports and their process details:"
+echo "$PORT_DETAILS"
+
 pytest -rA
