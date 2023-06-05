@@ -31,6 +31,36 @@ color_and_prefix() {
 	sed "s/^/${color}${black_fg}${prefix}: /" | sed "s/$/${normal_bg}${normal_fg}/";
 }
 
+export PGUSER="traffic_ops"
+export PGPASSWORD="twelve"
+export PGHOST="localhost"
+export PGDATABASE="traffic_ops"
+export PGPORT="5432"
+
+to_admin_username="$(jq -r '.params.login.username' "${GITHUB_WORKSPACE}/traffic_portal/test/integration/config.json")"
+to_admin_password="$(jq -r '.params.login.password' "${GITHUB_WORKSPACE}/traffic_portal/test/integration/config.json")"
+password_hash="$(<<PYTHON_COMMANDS PYTHONPATH="${GITHUB_WORKSPACE}/traffic_ops/install/bin" python
+from _postinstall import hash_pass
+print(hash_pass('${to_admin_password}'))
+PYTHON_COMMANDS
+)"
+<<QUERY psql
+INSERT INTO tm_user (username, role, tenant_id, local_passwd)
+	VALUES ('${to_admin_username}', (
+		SELECT id
+		FROM "role"
+		WHERE "name" = 'admin'
+	), (
+		SELECT id
+		FROM tenant
+		WHERE "name" = 'root'
+	),
+    '${password_hash}'
+  );
+QUERY
+
+sudo useradd trafops
+
 ciab_dir="${GITHUB_WORKSPACE}/infrastructure/cdn-in-a-box";
 openssl rand 32 | base64 | sudo tee /aes.key
 
