@@ -38,6 +38,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Install lsof
+        run: |
+          sudo apt update
+          sudo apt install -y lsof
     - run: ${{ github.action_path }}/entrypoint.sh
       shell: bash
       env:
