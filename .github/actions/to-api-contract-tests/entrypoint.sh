@@ -114,6 +114,12 @@ cp "${resources}/database.json" database.conf
 truncate --size=0 traffic.ops.log # Removes output from previous API versions and makes sure files exist
 ./traffic_ops_golang --cfg ./cdn.conf --dbcfg ./database.conf &
 
+
+LISTENING_PORTS=$(lsof -i -P | grep LISTEN)
+
+echo "Listening ports:"
+echo "$LISTENING_PORTS"
+
 cd "../testing/api_contract/v$INPUT_VERSION"
 
 cp "${resources}/traffic-ops-test.json" traffic-ops-test.conf
