@@ -15,12 +15,15 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import type {
+	Interface,
+	IPAddress,
 	RequestServer,
 	RequestServerCapability,
 	RequestStatus,
 	ResponseServer,
 	ResponseServerCapability,
 	ResponseStatus,
+	Server,
 	ServerCapability,
 	Servercheck,
 	ServerQueueResponse,
@@ -99,6 +102,29 @@ export class ServerService extends APIService {
 	 */
 	public async createServer(s: RequestServer): Promise<ResponseServer> {
 		return this.post<ResponseServer>("servers", s).toPromise();
+	}
+
+	/**
+	 * Updates a server by the given payload
+	 *
+	 * @param serverOrID The server object or id to be deleted
+	 * @param payload The server payload to update with.
+	 */
+	public async updateServer(serverOrID: ResponseServer | number, payload?: RequestServer): Promise<ResponseServer> {
+		let id;
+		let body;
+		if (typeof(serverOrID) === "number") {
+			if(!payload) {
+				throw new TypeError("invalid call signature - missing request paylaod");
+			}
+			body = payload;
+			id = +serverOrID;
+		} else {
+			body = serverOrID;
+			id = serverOrID.id;
+		}
+
+		return this.put<ResponseServer>(`servers/${id}`, body).toPromise();
 	}
 
 	public async getServerChecks(): Promise<Servercheck[]>;
@@ -236,6 +262,19 @@ export class ServerService extends APIService {
 	}
 
 	/**
+	 * Deletes an existing server.
+	 *
+	 * @param server The Server to be deleted, or just its ID.
+	 * @returns The deleted server.
+	 */
+	public async deleteServer(server: number | ResponseServer): Promise<ResponseServer> {
+		const id =  typeof(server) === "number" ? server : server.id;
+		const path = `servers/${id}`;
+		return this.delete<ResponseServer>(path).toPromise();
+
+	}
+
+	/**
 	 * Retrieves Server Capabilities from Traffic Ops.
 	 *
 	 * @returns All requested Capabilities.
@@ -300,5 +339,54 @@ export class ServerService extends APIService {
 	 */
 	public async createCapability(cap: RequestServerCapability): Promise<ResponseServerCapability> {
 		return this.post<ResponseServerCapability>("server_capabilities", cap).toPromise();
+	}
+
+	/**
+	 * Gets the "service" interface for a server; that is, the interface that
+	 * contains service addresses.
+	 *
+	 * @param server Either the server for which to find the "service"
+	 * interface, or just the interfaces thereof.
+	 * @returns The network interface that contains the service addresses.
+	 * @throws {Error} If no service addresses are found on any interface.
+	 */
+	public static getServiceInterface(server: Server | Interface[]): Interface {
+		const infs = Array.isArray(server) ? server : server.interfaces;
+		for (const inf of infs) {
+			for (const addr of inf.ipAddresses) {
+				if (addr.serviceAddress) {
+					return inf;
+				}
+			}
+		}
+		throw new Error("no service addresses found");
+	}
+
+	/**
+	 * Pulls apart an IP address with a CIDR-notation suffix into a plain
+	 * address (with no suffix) and a netmask that represents the same subnet
+	 * as the CIDR-notation suffix.
+	 *
+	 * @param addr The address from which to extract the netmask.
+	 * @returns The address without a netmask and the netmask itself (if one
+	 * could be found; otherwise it'll be `undefined`).
+	 */
+	public static extractNetmask(addr: IPAddress | string): [string, string | undefined] {
+		let addrStr = typeof(addr) === "string" ? addr : addr.address;
+		let maskStr;
+		if (addrStr.includes("/")) {
+			const parts = addrStr.split("/");
+			addrStr = parts[0];
+			let masklen = Number(parts[1]);
+
+			const mask = [];
+			for (let k = 0; k < 4; ++k) {
+				const n = Math.min(masklen, 8);
+				mask.push(256 - Math.pow(2, 8 - n));
+				masklen -= n;
+			}
+			maskStr = mask.join(".");
+		}
+		return [addrStr, maskStr];
 	}
 }

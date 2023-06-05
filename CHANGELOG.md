@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [unreleased]
 ### Added
+- [#7450](https://github.com/apache/trafficcontrol/pull/7450) *Traffic Ops* Removed hypnotoad section and added listen field to traffic_ops_golang section in order to simplify cdn config.
 - [#7290](https://github.com/apache/trafficcontrol/pull/7302) *Traffic Monitor* Update TM results with hostname from via header, syncronize health on caches with same service address
 - [#7291](https://github.com/apache/trafficcontrol/pull/7291) *Traffic Ops* Extended Layered Profile feature to aggregate parameters for all server profiles.
 - [#7314](https://github.com/apache/trafficcontrol/pull/7314) *Traffic Portal* Added capability feature to Delivery Service Form (HTTP, DNS).
@@ -35,6 +36,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - [#7367](https://github.com/apache/trafficcontrol/pull/7367) *Traffic Ops* Adds ACME:CREATE, ACME:DELETE, ACME:DELETE, and ACME:READ permissions to operations role.
 - [#7380](https://github.com/apache/trafficcontrol/pull/7380) *Traffic Portal* Adds strikethrough (expired), red (7 days until expiration) and yellow (30 days until expiration) visuals to delivery service cert expiration grid rows.
 - [#7388](https://github.com/apache/trafficcontrol/pull/7388) *TC go Client* Adds sslkey_expiration methodology in v4 and v5 clients
+- [#7543](https://github.com/apache/trafficcontrol/pull/7543) *Traffic Portal* New Ansible Role to use Traffic Portal v2
+
 
 ### Changed
 - [#7521](https://github.com/apache/trafficcontrol/pull/7521) *Traffic Ops* Returns empty array instead of null when no permissions are given for roles endpoint using POST or PUT request.
@@ -54,8 +57,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - [#7469](https://github.com/apache/trafficcontrol/pull/7469) *Traffic Ops* Changed logic to not report empty or missing cookies into TO error.log.
 
 ### Fixed
+- [#7539](https://github.com/apache/trafficcontrol/pull/7539) *Traffic Monitor* Use stats_over_http timestamp to calculate bandwidth for TM's health. 
+- [#7542](https://github.com/apache/trafficcontrol/pull/7542) *Traffic Ops* Fixed `CDN Locks` documentation to reflect the correct RFC3339 timestamps.
+- [#6340](https://github.com/apache/trafficcontrol/issues/6340) *Traffic Ops* Fixed alert messages for POST and PUT invalidation job APIs.
+- [#7519] (https://github.com/apache/trafficcontrol/issues/7519) *Traffic Ops* Fixed TO API /servers/{id}/deliveryservices endpoint to responding with all DS's on cache that are directly assigned and inherited through topology.
 - [#7511](https://github.com/apache/trafficcontrol/pull/7511) *Traffic Ops* Fixed the changelog registration message to include the username instead of duplicate email entry.
-- [#7505](https://github.com/apache/trafficcontrol/pull/7505) *Traffic Portal* Fix an issue where a Delivery Service with Geo Limit Countries Set was unable to be updated.
+- [#7465](https://github.com/apache/trafficcontrol/issues/7465) *Traffic Ops* Fixes server_capabilities v5 apis to respond with RFC3339 date/time Format
 - [#7441](https://github.com/apache/trafficcontrol/pull/7441) *Traffic Ops* Fixed the invalidation jobs endpoint to respect CDN locks.
 - [#7413](https://github.com/apache/trafficcontrol/issues/7413) *Traffic Ops* Fixes service_category apis to respond with RFC3339 date/time Format
 - [#7414](https://github.com/apache/trafficcontrol/pull/7414) * Traffic Portal* Fixed DSR difference for DS required capability.

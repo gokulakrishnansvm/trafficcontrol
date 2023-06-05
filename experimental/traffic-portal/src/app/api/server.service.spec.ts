@@ -14,13 +14,14 @@
  */
 import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
 import { TestBed } from "@angular/core/testing";
+import { type ResponseServer } from "trafficops-types";
 
 import { ServerService } from "./server.service";
 
 describe("ServerService", () => {
 	let service: ServerService;
 	let httpTestingController: HttpTestingController;
-	const server = {
+	const server: ResponseServer = {
 		cachegroup: "cachegroup",
 		cachegroupId: 1,
 		cdnId: 1,
@@ -43,9 +44,7 @@ describe("ServerService", () => {
 		offlineReason: null,
 		physLocation: "physicalLocation",
 		physLocationId: 1,
-		profile: "profile",
-		profileDesc: "profileDesc",
-		profileId: 1,
+		profileNames: ["profile"],
 		rack: null,
 		revalPending: false,
 		routerHostName: null,
@@ -133,6 +132,46 @@ describe("ServerService", () => {
 			expect(req.request.body).toEqual(server);
 			req.flush({response: server});
 			await expectAsync(responseP).toBeResolvedTo(server);
+		});
+
+		it("updates a server by ID", async ()  => {
+			const resp = service.updateServer(server.id, server);
+			const req = httpTestingController.expectOne(`/api/${service.apiVersion}/servers/${server.id}`);
+			expect(req.request.method).toBe("PUT");
+			expect(req.request.body).toEqual(server);
+
+			req.flush({response: server});
+			await expectAsync(resp).toBeResolvedTo(server);
+		});
+
+		it("updates a server", async ()  => {
+			const resp = service.updateServer(server);
+			const req = httpTestingController.expectOne(`/api/${service.apiVersion}/servers/${server.id}`);
+			expect(req.request.method).toBe("PUT");
+			expect(req.request.body).toEqual(server);
+
+			req.flush({response: server});
+			await expectAsync(resp).toBeResolvedTo(server);
+		});
+
+		it("delete a server", async ()  => {
+			const resp = service.deleteServer(server);
+			const req = httpTestingController.expectOne(`/api/${service.apiVersion}/servers/${server.id}`);
+			expect(req.request.method).toBe("DELETE");
+			expect(req.request.body).toBeNull();
+
+			req.flush({response: server});
+			await expectAsync(resp).toBeResolvedTo(server);
+		});
+
+		it("delete a server by ID", async ()  => {
+			const resp = service.deleteServer(server.id);
+			const req = httpTestingController.expectOne(`/api/${service.apiVersion}/servers/${server.id}`);
+			expect(req.request.method).toBe("DELETE");
+			expect(req.request.body).toBeNull();
+
+			req.flush({response: server});
+			await expectAsync(resp).toBeResolvedTo(server);
 		});
 	});
 
@@ -296,6 +335,105 @@ describe("ServerService", () => {
 			const response = [{...serverCheck, id: server.id+1}];
 			req.flush({response});
 			await expectAsync(responseP).toBeRejected(response[1]);
+		});
+	});
+
+	describe("static methods", () => {
+		it("finds a service address", () => {
+			const infs = [
+				{
+					ipAddresses: [
+						{
+							address: "",
+							gateway: "",
+							serviceAddress: false
+						}
+					],
+					maxBandwidth: null,
+					monitor: false,
+					mtu: null,
+					name: "eth0"
+				},
+				{
+					ipAddresses: [
+						{
+							address: "",
+							gateway: "",
+							serviceAddress: false
+						},
+						{
+							address: "",
+							gateway: "",
+							serviceAddress: false
+						}
+					],
+					maxBandwidth: null,
+					monitor: false,
+					mtu: null,
+					name: "eth1"
+				},
+				{
+					ipAddresses: [
+						{
+							address: "",
+							gateway: "",
+							serviceAddress: false
+						},
+						{
+							address: "",
+							gateway: "",
+							serviceAddress: true
+						},
+					],
+					maxBandwidth: null,
+					monitor: false,
+					mtu: null,
+					name: "eth2"
+				}
+			];
+			const serviceInf = ServerService.getServiceInterface(infs);
+			expect(serviceInf).toBe(infs[2]);
+		});
+		it("throws an error when a server has no service addresses", () => {
+			expect(()=>ServerService.getServiceInterface({
+				cachegroupId: -1,
+				cdnId: -1,
+				domainName: "",
+				hostName: "",
+				interfaces: [{
+					ipAddresses: [
+						{
+							address: "",
+							gateway: "",
+							serviceAddress: false
+						},
+						{
+							address: "",
+							gateway: "",
+							serviceAddress: false
+						}
+					],
+					maxBandwidth: null,
+					monitor: false,
+					mtu: null,
+					name: "eth0"
+				}],
+				physLocationId: -1,
+				profileNames: [],
+				statusId: -1,
+				typeId: -1,
+			})).toThrow();
+		});
+		it("extracts netmasks", () => {
+			const [addr, netmask] = ServerService.extractNetmask("192.168.0.1/16");
+			expect(addr).toBe("192.168.0.1");
+			expect(netmask).toBe("255.255.0.0");
+		});
+		it("doesn't break when a plain address (no CIDR suffix) is passed", () => {
+			const raw = "192.168.0.1";
+			const [addr, netmask] = ServerService.extractNetmask(raw);
+			expect(addr).toBe(raw);
+			expect(netmask).toBeUndefined();
 		});
 	});
 

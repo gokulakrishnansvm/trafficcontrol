@@ -48,6 +48,8 @@ import {
 } from "./deliveryservice/invalidation-jobs/new-invalidation-job-dialog/new-invalidation-job-dialog.component";
 import { NewDeliveryServiceComponent } from "./deliveryservice/new-delivery-service/new-delivery-service.component";
 import { ISOGenerationFormComponent } from "./misc/isogeneration-form/isogeneration-form.component";
+import { ParameterDetailComponent } from "./parameters/detail/parameter-detail.component";
+import { ParametersTableComponent } from "./parameters/table/parameters-table.component";
 import { ProfileDetailComponent } from "./profiles/profile-detail/profile-detail.component";
 import { ProfileTableComponent } from "./profiles/profile-table/profile-table.component";
 import { CapabilitiesComponent } from "./servers/capabilities/capabilities.component";
@@ -61,6 +63,7 @@ import { StatusDetailsComponent } from "./statuses/status-details/status-details
 import { StatusesTableComponent } from "./statuses/statuses-table/statuses-table.component";
 import { TypeDetailComponent } from "./types/detail/type-detail.component";
 import { TypesTableComponent } from "./types/table/types-table.component";
+import { RoleDetailComponent } from "./users/roles/detail/role-detail.component";
 import { RolesTableComponent } from "./users/roles/table/roles-table.component";
 import { TenantDetailsComponent } from "./users/tenants/tenant-details/tenant-details.component";
 import { TenantsComponent } from "./users/tenants/tenants.component";
@@ -91,6 +94,8 @@ export const ROUTES: Routes = [
 	{ component: CacheGroupTableComponent, path: "cache-groups" },
 	{ component: CacheGroupDetailsComponent, path: "cache-groups/:id"},
 	{ component: RolesTableComponent, path: "roles"},
+	{ component: RoleDetailComponent, path: "roles/:name"},
+	{ component: RoleDetailComponent, path: "new-role"},
 	{ component: TenantsComponent, path: "tenants"},
 	{ component: ChangeLogsComponent, path: "change-logs" },
 	{ component: TenantDetailsComponent, path: "tenants/:id"},
@@ -100,6 +105,8 @@ export const ROUTES: Routes = [
 	{ component: CoordinatesTableComponent, path: "coordinates" },
 	{ component: TypesTableComponent, path: "types" },
 	{ component: TypeDetailComponent, path: "types/:id"},
+	{ component: ParametersTableComponent, path: "parameters" },
+	{ component: ParameterDetailComponent, path: "parameters/:id" },
 	{ component: StatusesTableComponent, path: "statuses" },
 	{ component: StatusDetailsComponent, path: "statuses/:id" },
 	{ component: ISOGenerationFormComponent, path: "iso-gen"},
@@ -129,6 +136,7 @@ export const ROUTES: Routes = [
 		TenantsComponent,
 		UserRegistrationDialogComponent,
 		RolesTableComponent,
+		RoleDetailComponent,
 		TenantDetailsComponent,
 		ChangeLogsComponent,
 		LastDaysComponent,
@@ -149,9 +157,11 @@ export const ROUTES: Routes = [
 		StatusesTableComponent,
 		StatusDetailsComponent,
 		ISOGenerationFormComponent,
-  		ProfileTableComponent,
 		CDNDetailComponent,
-  		ProfileDetailComponent,
+		ParametersTableComponent,
+		ParameterDetailComponent,
+		ProfileTableComponent,
+		ProfileDetailComponent,
 		CapabilitiesComponent,
 		CapabilityDetailsComponent,
 	],
@@ -160,7 +170,7 @@ export const ROUTES: Routes = [
 		SharedModule,
 		AppUIModule,
 		CommonModule,
-		RouterModule.forChild(ROUTES)
+		RouterModule.forChild(ROUTES),
 	]
 })
 export class CoreModule { }
