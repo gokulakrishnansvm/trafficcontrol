@@ -1,6 +1,6 @@
 {
     "user": "admin",
-    "password": "twelve",
+    "password": "twelve12",
     "url": "https://localhost:6443/api/4.0",
     "port": 6443
 }
