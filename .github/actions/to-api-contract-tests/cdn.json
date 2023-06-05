@@ -3,6 +3,8 @@
 	"use_ims": true,
 	"role_based_permissions": true,
 	"traffic_ops_golang": {
+		"cert": "$PWD/localhost.crt",
+		"key": "$PWD/localhost.key",
 		"insecure": true,
 		"port": "6443",
 		"log_location_error": "traffic.ops.log",
