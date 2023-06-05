@@ -1,6 +1,6 @@
 {
-    "user": "admin",
-    "password": "twelve12",
+    "user": "traffic_ops",
+    "password": "twelve",
     "url": "https://localhost:6443/api/4.0",
     "port": 6443
 }
