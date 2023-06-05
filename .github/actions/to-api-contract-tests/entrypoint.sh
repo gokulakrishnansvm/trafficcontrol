@@ -115,6 +115,11 @@ truncate --size=0 traffic.ops.log # Removes output from previous API versions an
 ./traffic_ops_golang --cfg ./cdn.conf --dbcfg ./database.conf &
 
 
+set -e
+
+apt update
+apt install -y lsof
+
 LISTENING_PORTS=$(lsof -i -P | grep LISTEN)
 
 echo "Listening ports:"
