@@ -77,7 +77,7 @@ jobs:
     - name: Cache Alpine Docker image
       uses: actions/cache@v2
       with:
-        path: ${HOME}/go/src/github.com/apache/trafficcontrol/docker-images
+        path: ${{ github.workspace }}/docker-images
         key: docker-images/alpine@${{ env.ALPINE_VERSION }}.tar.gz
     - name: Import cached Alpine Docker image
       run: .github/actions/save-alpine-tar/entrypoint.sh load ${{ env.ALPINE_VERSION }}
