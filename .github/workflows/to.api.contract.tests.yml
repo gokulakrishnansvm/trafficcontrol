@@ -63,10 +63,6 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - name: Set up Go environment
-      run: |
-        sudo mkdir -p "home/runner/work/go/src/github.com/apache"
-        echo "export GOPATH='home/runner/work/go'" >> $GITHUB_ENV
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
