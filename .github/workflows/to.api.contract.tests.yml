@@ -65,15 +65,15 @@ jobs:
     steps:
     - name: Set up Go environment
       run: |
-        sudo mkdir -p "${HOME}/go/src/github.com/apache"
-        echo "export GOPATH='${HOME}/go'" >> $GITHUB_ENV
+        sudo mkdir -p "${HOME}/workgo/src/github.com/apache"
+        echo "export GOPATH='${HOME}/workgo'" >> $GITHUB_ENV
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        path: ${HOME}/go/src/github.com/apache/trafficcontrol
+        path: ${HOME}/workgo/src/github.com/apache/trafficcontrol
     - name: Build
       run: |
-        cd ${HOME}/go/src/github.com/apache/trafficcontrol
+        cd ${HOME}/work/go/src/github.com/apache/trafficcontrol
     - name: Cache Alpine Docker image
       uses: actions/cache@v2
       with:
