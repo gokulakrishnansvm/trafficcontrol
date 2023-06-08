@@ -63,18 +63,16 @@ jobs:
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - name: Set up environment variables
-      run: |
-        sudo mkdir -p "${HOME}/work/go/src/github.com/apache/trafficcontrol"
-        echo "TC_DIR=${HOME}/work/go/src/github.com/apache/trafficcontrol" >> $GITHUB_ENV
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        path: ${{ env.TC_DIR }}
+    # - name: Set up environment variables
+    #   run: |
+    #     sudo mkdir -p "${HOME}/work/go/src/github.com/apache/trafficcontrol"
+    #     echo "TC_DIR=${HOME}/work/go/src/github.com/apache/trafficcontrol" >> $GITHUB_ENV
+    - name: Checkout
+      uses: actions/checkout@master
     - name: Cache Alpine Docker image
       uses: actions/cache@v2
       with:
-        path: ${{ env.TC_DIR }}/docker-images
+        path: ${{ github.workspace }}/docker-images
         key: docker-images/alpine@${{ env.ALPINE_VERSION }}.tar.gz
     - name: Import cached Alpine Docker image
       run: .github/actions/save-alpine-tar/entrypoint.sh load ${{ env.ALPINE_VERSION }}
@@ -94,11 +92,11 @@ jobs:
         python-version: 3.10.11
     - name: Install Python dependencies
       run: |
-        pip install -r "${{ env.TC_DIR }}/traffic_ops/testing/api_contract/v4/requirements.txt"
+        pip install -r "${{ github.workspace }}/traffic_ops/testing/api_contract/v4/requirements.txt"
     - name: Install Apache Traffic Control
       run: |
         python -m pip install --upgrade pip
-        pip install ${{ env.TC_DIR }}/traffic_control/clients/python
+        pip install ${{ github.workspace }}/traffic_control/clients/python
         pip install typing-extensions --upgrade
     - name: Run API v4 contract tests
       id: v4Tests
@@ -111,12 +109,12 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: v4 Traffic Vault logs
-        path: ${{ env.TC_DIR }}/infrastructure/cdn-in-a-box/traffic.vault.logs
+        path: ${{ github.workspace }}/infrastructure/cdn-in-a-box/traffic.vault.logs
     - name: Upload Ops logs
       if: ${{ steps.v4Tests.outcome != 'success' && always() }}
       uses: actions/upload-artifact@v2
       with:
         name: v4 Traffic Ops logs
-        path: ${{ env.TC_DIR }}/traffic_ops/traffic_ops_golang/traffic.ops.log
+        path: ${{ github.workspace }}/traffic_ops/traffic_ops_golang/traffic.ops.log
     - name: Save Alpine Docker image
       run: .github/actions/save-alpine-tar/entrypoint.sh save ${{ env.ALPINE_VERSION }}
