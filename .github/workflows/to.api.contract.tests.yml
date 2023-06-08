@@ -65,7 +65,7 @@ jobs:
     steps:
     - name: Set up environment variables
       run: |
-        echo "TC_DIR=${HOME}/go/src/github.com/apache/trafficcontrol" >> $GITHUB_ENV
+        echo "TC_DIR=${HOME}/work/go/src/github.com/apache/trafficcontrol" >> $GITHUB_ENV
     - name: Checkout repository
       uses: actions/checkout@v2
       with:
