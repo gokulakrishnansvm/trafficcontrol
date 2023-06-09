@@ -213,5 +213,20 @@
 			"protocol": "http",
 			"tenantId": 1
 		}
+	],
+	"users": [
+		{
+			"username": "test",
+			"addressLine1": "22 Mike Wazowski You've Got Your Life Back Lane",
+			"city": "Monstropolis",
+			"compary": "Monsters Inc.",
+			"email": "mwazowski@minc.biz",
+			"fullName": "Mike Wazowski",
+			"localPasswd": "BFFsully",
+			"confirmLocalPasswd": "BFFsully",
+			"newUser": true,
+			"role": "admin",
+			"tenantId": 1
+		}
 	]
 }
