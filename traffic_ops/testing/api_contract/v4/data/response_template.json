@@ -1929,8 +1929,8 @@
             },
             "type": {
                 "type": "string"
-              }
-          }
+            }
+        }
     },
     "delivery_service_capacity": {
         "type": "object",
@@ -2097,6 +2097,59 @@
             },
             "typeId": {
                 "type": "integer"
+            }
+        }
+    },
+    "server_check_extensions": {
+        "type": [
+            "array",
+            "object"
+        ],
+        "items": {
+            "type": "object",
+            "required": [
+                "script_file",
+                "version",
+                "name",
+                "description",
+                "info_url",
+                "additional_config_json",
+                "isactive",
+                "type",
+                "id",
+                "servercheck_short_name"
+            ],
+            "properties": {
+                "script_file": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "null"
+                },
+                "info_url": {
+                    "type": "string"
+                },
+                "additional_config_json": {
+                    "type": "string"
+                },
+                "isactive": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "servercheck_short_name": {
+                    "type": "string"
+                }
             }
         }
     }

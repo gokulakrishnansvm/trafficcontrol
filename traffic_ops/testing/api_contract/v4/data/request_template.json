@@ -419,9 +419,11 @@
 			"replace": true
 		}
 	],
-	"federation_federation_resolver":[
+	"federation_federation_resolver": [
 		{
-			"fedResolverIds": [39],
+			"fedResolverIds": [
+				39
+			],
 			"replace": true
 		}
 	],
@@ -450,7 +452,7 @@
 	"service_category": [
 		{
 			"name": "SERVICE-CATEGORY-NAME"
-      }
+		}
 	],
 	"federation_resolver": [
 		{
@@ -465,6 +467,18 @@
 			"host": "test",
 			"ttl": 300,
 			"typeId": 41
+		}
+	],
+	"server_check_extensions": [
+		{
+			"name": "test",
+			"version": "0.0.1-1",
+			"info_url": "",
+			"script_file": "",
+			"isactive": 0,
+			"description": "A test extension for API examples",
+			"servercheck_short_name": "test",
+			"type": "CHECK_EXTENSION_NUM"
 		}
 	]
 }
