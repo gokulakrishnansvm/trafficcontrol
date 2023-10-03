@@ -1813,7 +1813,7 @@ def profile_parameters_post_data(to_session: TOSession, request_template_data: l
 
 @pytest.fixture(name="service_category_post_data")
 def service_category_data_post(to_session: TOSession,
-		request_template_data: list[JSONData]) -> dict[str, object]:
+		request_template_data: list[JSONData], pytestconfig: pytest.Config) -> dict[str, object]:
 	"""
 	PyTest Fixture to create POST data for service_category endpoint.
 	:param to_session: Fixture to get Traffic Ops session.
@@ -1834,7 +1834,7 @@ def service_category_data_post(to_session: TOSession,
 		data=service_category)
 	resp_obj = check_template_data(response, "service_category")
 	yield resp_obj
-	service_category_name = resp_obj.get("name")
+	service_category_name = pytestconfig.cache.get("service_category_name", default=None)
 	msg = to_session.delete_service_category(service_category_name=service_category_name)
 	logger.info("Deleting service_category data... %s", msg)
 	if msg is None:
